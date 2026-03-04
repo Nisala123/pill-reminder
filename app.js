@@ -422,13 +422,15 @@ function setupDragAndDrop() {
     if (event.target.closest('button')) return;
     const li = event.target.closest('.medicine-item');
     if (!li) return;
-    event.preventDefault();
     dragId = li.dataset.id;
     li.classList.add('dragging');
+    document.body.classList.add('no-scroll');
+    li.setPointerCapture(event.pointerId);
   });
 
   listEl.addEventListener('pointerup', (event) => {
     if (!dragId) return;
+    document.body.classList.remove('no-scroll');
     const sourceId = dragId;
     const targetLi = event.target.closest('.medicine-item');
 
