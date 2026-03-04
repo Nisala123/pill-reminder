@@ -271,6 +271,11 @@ select:focus {
   display: flex;
   justify-content: space-between;
   gap: 8px;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  touch-action: pan-y;
 }
 
 .medicine-item.dragging {

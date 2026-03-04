@@ -422,6 +422,7 @@ function setupDragAndDrop() {
     if (event.target.closest('button')) return;
     const li = event.target.closest('.medicine-item');
     if (!li) return;
+    event.preventDefault();
     dragId = li.dataset.id;
     li.classList.add('dragging');
   });
