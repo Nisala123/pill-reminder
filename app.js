@@ -416,7 +416,7 @@ function setupDragAndDrop() {
     renderMedicines();
   });
 
-  // Pointer-based reordering for touch/mobile (also works on desktop).
+  // Pointer based reordering for touch/mobile (also works on desktop).
   listEl.addEventListener('pointerdown', (event) => {
     // Ignore presses on buttons like "Remove"
     if (event.target.closest('button')) return;
