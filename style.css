@@ -1,0 +1,310 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at top, #f5f5ff 0, #e8f0ff 40%, #e9f5f0 100%);
+  color: #0f172a;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 16px 16px 32px;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.app-header h1 {
+  margin: 8px 0 4px;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: #ffffffcc;
+  backdrop-filter: blur(16px);
+  border-radius: 18px;
+  padding: 16px 16px 20px;
+  box-shadow: 0 20px 35px rgba(15, 23, 42, 0.08);
+}
+
+.card h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.field label,
+.field-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #0f172a;
+}
+
+input[type='text'],
+input[type='date'],
+select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #cbd5f5;
+  font-size: 0.95rem;
+  outline: none;
+  background: #f9fbff;
+}
+
+input:focus,
+select:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.35);
+  background: #ffffff;
+}
+
+.field-inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.field-inline .field-label {
+  margin-bottom: 0;
+  margin-right: 4px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 999px;
+  border: 1px solid #cbd5f5;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  background: #f8fafc;
+  cursor: pointer;
+  user-select: none;
+}
+
+.chip input {
+  accent-color: #4f46e5;
+}
+
+.day-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.field-dates {
+  display: flex;
+  gap: 10px;
+}
+
+.field-dates > div {
+  flex: 1;
+}
+
+.primary-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.45);
+}
+
+.primary-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 8px 15px rgba(79, 70, 229, 0.4);
+}
+
+.list-section {
+  background: #ffffffcc;
+  backdrop-filter: blur(16px);
+  border-radius: 18px;
+  padding: 16px 16px 10px;
+  box-shadow: 0 20px 35px rgba(15, 23, 42, 0.08);
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.list-header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.link-btn {
+  border: none;
+  background: none;
+  color: #ef4444;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.empty-state {
+  font-size: 0.9rem;
+  color: #6b7280;
+  padding: 8px 0 10px;
+}
+
+.medicine-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.medicine-item {
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  padding: 10px 12px;
+  background: #f9fafb;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.medicine-main {
+  flex: 1;
+}
+
+.medicine-name {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.medicine-dose {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+.medicine-meta {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.tag.secondary {
+  background: #ecfeff;
+  color: #0e7490;
+}
+
+.delete-btn {
+  border-radius: 999px;
+  border: none;
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  align-self: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: radial-gradient(circle at top, #020617 0, #020617 35%, #020617 100%);
+    color: #e5e7eb;
+  }
+
+  .card,
+  .list-section {
+    background: #020617f2;
+    border: 1px solid #1f2937;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+  }
+
+  input[type='text'],
+  input[type='date'],
+  select {
+    background: #020617;
+    border-color: #1f2937;
+    color: #e5e7eb;
+  }
+
+  input:focus,
+  select:focus {
+    background: #020617;
+  }
+
+  .chip {
+    background: #020617;
+    border-color: #1f2937;
+  }
+
+  .medicine-item {
+    background: #020617;
+    border-color: #1f2937;
+  }
+
+  .tag {
+    background: #111827;
+    color: #a5b4fc;
+  }
+
+  .tag.secondary {
+    background: #022c22;
+    color: #6ee7b7;
+  }
+
+  .empty-state {
+    color: #9ca3af;
+  }
+}
+

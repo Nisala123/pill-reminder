@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pill Reminder</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <h1>Pill Reminder</h1>
+        <p class="subtitle">Track your medicines and schedule</p>
+      </header>
+
+      <main>
+        <section class="card">
+          <h2>Add medicine</h2>
+          <form id="medicine-form">
+            <div class="field">
+              <label for="name">Medicine name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="e.g. Metformin"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="dose">Dose (optional)</label>
+              <input
+                type="text"
+                id="dose"
+                name="dose"
+                placeholder="e.g. 500 mg"
+              />
+            </div>
+
+            <div class="field">
+              <label for="frequency">Frequency type</label>
+              <select id="frequency" name="frequency" required>
+                <option value="daily">Daily</option>
+                <option value="specific-days">Specific days of week</option>
+                <option value="every-other-day">Every other day</option>
+              </select>
+            </div>
+
+            <div class="field field-inline">
+              <span class="field-label">Time of day</span>
+              <label class="chip">
+                <input type="checkbox" name="timeOfDay" value="morning" />
+                <span>Morning</span>
+              </label>
+              <label class="chip">
+                <input type="checkbox" name="timeOfDay" value="afternoon" />
+                <span>Afternoon</span>
+              </label>
+              <label class="chip">
+                <input type="checkbox" name="timeOfDay" value="night" />
+                <span>Night</span>
+              </label>
+            </div>
+
+            <div class="field specific-days hidden" id="specific-days-field">
+              <span class="field-label">Select days</span>
+              <div class="day-chips">
+                <label class="chip">
+                  <input type="checkbox" name="days" value="Mon" />
+                  <span>Mon</span>
+                </label>
+                <label class="chip">
+                  <input type="checkbox" name="days" value="Tue" />
+                  <span>Tue</span>
+                </label>
+                <label class="chip">
+                  <input type="checkbox" name="days" value="Wed" />
+                  <span>Wed</span>
+                </label>
+                <label class="chip">
+                  <input typecheckbox" name="days" value="Thu" />
+                  <span>Thu</span>
+                </label>
+                <label class="chip">
+                  <input type="checkbox" name="days" value="Fri" />
+                  <span>Fri</span>
+                </label>
+                <label class="chip">
+                  <input type="checkbox" name="days" value="Sat" />
+                  <span>Sat</span>
+                </label>
+                <label class="chip">
+                  <input type="checkbox" name="days" value="Sun" />
+                  <span>Sun</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="field field-dates">
+              <div>
+                <label for="startDate">Start date</label>
+                <input type="date" id="startDate" name="startDate" required />
+              </div>
+              <div>
+                <label for="endDate">End date (optional)</label>
+                <input type="date" id="endDate" name="endDate" />
+              </div>
+            </div>
+
+            <button type="submit" class="primary-btn">Add medicine</button>
+          </form>
+        </section>
+
+        <section class="list-section">
+          <div class="list-header">
+            <h2>Your medicines</h2>
+            <button id="clear-all" class="link-btn">Clear all</button>
+          </div>
+          <div id="empty-state" class="empty-state">
+            No medicines added yet.
+          </div>
+          <ul id="medicine-list" class="medicine-list"></ul>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+
