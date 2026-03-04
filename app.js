@@ -415,6 +415,47 @@ function setupDragAndDrop() {
     saveMedicines(medicines);
     renderMedicines();
   });
+
+  // Pointer-based reordering for touch/mobile (also works on desktop).
+  listEl.addEventListener('pointerdown', (event) => {
+    // Ignore presses on buttons like "Remove"
+    if (event.target.closest('button')) return;
+    const li = event.target.closest('.medicine-item');
+    if (!li) return;
+    dragId = li.dataset.id;
+    li.classList.add('dragging');
+  });
+
+  listEl.addEventListener('pointerup', (event) => {
+    if (!dragId) return;
+    const sourceId = dragId;
+    const targetLi = event.target.closest('.medicine-item');
+
+    // Clear dragging state
+    const draggingEl = listEl.querySelector('.medicine-item.dragging');
+    if (draggingEl) draggingEl.classList.remove('dragging');
+    dragId = null;
+
+    if (!targetLi) return;
+    const targetId = targetLi.dataset.id;
+    if (!targetId || targetId === sourceId) return;
+
+    const medicines = loadMedicines();
+    const fromIndex = medicines.findIndex((m) => m.id === sourceId);
+    const toIndex = medicines.findIndex((m) => m.id === targetId);
+    if (fromIndex === -1 || toIndex === -1) return;
+
+    const [moved] = medicines.splice(fromIndex, 1);
+    medicines.splice(toIndex, 0, moved);
+    saveMedicines(medicines);
+    renderMedicines();
+  });
+
+  listEl.addEventListener('pointercancel', () => {
+    const draggingEl = listEl.querySelector('.medicine-item.dragging');
+    if (draggingEl) draggingEl.classList.remove('dragging');
+    dragId = null;
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
