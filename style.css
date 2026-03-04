@@ -273,6 +273,11 @@ select:focus {
   gap: 8px;
 }
 
+.medicine-item.dragging {
+  opacity: 0.7;
+  box-shadow: 0 0 0 2px #4f46e5;
+}
+
 .medicine-main {
   flex: 1;
 }

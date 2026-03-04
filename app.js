@@ -220,6 +220,7 @@ function renderMedicines() {
     const li = document.createElement('li');
     li.className = 'medicine-item';
     li.dataset.id = med.id;
+    li.draggable = true;
 
     const main = document.createElement('div');
     main.className = 'medicine-main';
@@ -362,8 +363,6 @@ function setupAccordions() {
     const header = accordion.querySelector('.accordion-header');
     if (!header) return;
 
-    accordion.classList.remove('collapsed');
-
     header.addEventListener('click', (event) => {
       // Allow inner buttons like "Clear all" to work without toggling.
       if (event.target.closest('#clear-all')) {
@@ -374,9 +373,54 @@ function setupAccordions() {
   });
 }
 
+function setupDragAndDrop() {
+  const listEl = document.getElementById('medicine-list');
+  if (!listEl) return;
+
+  let dragId = null;
+
+  listEl.addEventListener('dragstart', (event) => {
+    const li = event.target.closest('.medicine-item');
+    if (!li) return;
+    dragId = li.dataset.id;
+    li.classList.add('dragging');
+  });
+
+  listEl.addEventListener('dragend', (event) => {
+    const li = event.target.closest('.medicine-item');
+    if (li) {
+      li.classList.remove('dragging');
+    }
+    dragId = null;
+  });
+
+  listEl.addEventListener('dragover', (event) => {
+    event.preventDefault();
+  });
+
+  listEl.addEventListener('drop', (event) => {
+    event.preventDefault();
+    const targetLi = event.target.closest('.medicine-item');
+    if (!dragId || !targetLi) return;
+    const targetId = targetLi.dataset.id;
+    if (!targetId || targetId === dragId) return;
+
+    const medicines = loadMedicines();
+    const fromIndex = medicines.findIndex((m) => m.id === dragId);
+    const toIndex = medicines.findIndex((m) => m.id === targetId);
+    if (fromIndex === -1 || toIndex === -1) return;
+
+    const [moved] = medicines.splice(fromIndex, 1);
+    medicines.splice(toIndex, 0, moved);
+    saveMedicines(medicines);
+    renderMedicines();
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   setupForm();
   setupAccordions();
+  setupDragAndDrop();
   renderMedicines();
 
    const scheduleDateInput = document.getElementById('schedule-date');
