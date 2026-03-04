@@ -38,6 +38,13 @@ function formatTimeOfDay(med) {
   return pretty;
 }
 
+function formatMealTiming(med) {
+  if (!med.mealTiming) return null;
+  if (med.mealTiming === 'before') return 'Before meal';
+  if (med.mealTiming === 'after') return 'After meal';
+  return null;
+}
+
 function formatDateRange(med) {
   if (!med.startDate && !med.endDate) return '';
   if (med.startDate && !med.endDate) return `From ${med.startDate}`;
@@ -155,6 +162,16 @@ function renderScheduleForDate(dateStr) {
       todTag.className = 'tag secondary';
       todTag.textContent = tod;
       tagRow.appendChild(todTag);
+    }
+
+    const meal = formatMealTiming(med);
+    if (meal) {
+      const mealTag = document.createElement('span');
+      const mealClass =
+        med.mealTiming === 'before' ? 'tag meal-before' : 'tag meal-after';
+      mealTag.className = mealClass;
+      mealTag.textContent = meal;
+      tagRow.appendChild(mealTag);
     }
 
     const dateRange = formatDateRange(med);
@@ -314,6 +331,7 @@ function setupForm() {
 
     const timeOfDay = formData.getAll('timeOfDay');
     const days = formData.getAll('days');
+    const mealTiming = formData.get('mealTiming') || '';
 
     const newMed = {
       id: crypto.randomUUID ? crypto.randomUUID() : `med-${Date.now()}-${Math.random()}`,
@@ -321,6 +339,7 @@ function setupForm() {
       dose,
       frequency,
       timeOfDay,
+      mealTiming,
       days: frequency === 'specific-days' ? days : [],
       startDate,
       endDate,

@@ -313,6 +313,16 @@ select:focus {
   color: #0e7490;
 }
 
+.tag.meal-before {
+  background: #dcf4fc;
+  color: #166534;
+}
+
+.tag.meal-after {
+  background: #ffedd5;
+  color: #c05621;
+}
+
 .delete-btn {
   border-radius: 999px;
   border: none;
@@ -372,6 +382,16 @@ select:focus {
   .tag.secondary {
     background: #022c22;
     color: #6ee7b7;
+  }
+
+  .tag.meal-before {
+    background: #4e064a;
+    color: #bbf7d0;
+  }
+
+  .tag.meal-after {
+    background: #7c2d12;
+    color: #fed7aa;
   }
 
   .empty-state {
