@@ -45,6 +45,145 @@ function formatDateRange(med) {
   return `${med.startDate} → ${med.endDate}`;
 }
 
+function getTodayDateString() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function parseDate(dateStr) {
+  if (!dateStr) return null;
+  const [year, month, day] = dateStr.split('-').map(Number);
+  if (!year || !month || !day) return null;
+  return new Date(Date.UTC(year, month - 1, day));
+}
+
+function isWithinDateRange(med, targetDate) {
+  const start = parseDate(med.startDate);
+  const end = parseDate(med.endDate);
+
+  if (start && targetDate < start) return false;
+  if (end && targetDate > end) return false;
+  return true;
+}
+
+function shouldTakeOnDate(med, targetDate) {
+  if (!isWithinDateRange(med, targetDate)) return false;
+
+  if (med.frequency === 'daily') return true;
+
+  if (med.frequency === 'every-other-day') {
+    const start = parseDate(med.startDate);
+    if (!start) return false;
+    const diffMs = targetDate - start;
+    const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+    return diffDays % 2 === 0;
+  }
+
+  if (med.frequency === 'specific-days') {
+    if (!med.days || med.days.length === 0) return false;
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayName = dayNames[targetDate.getUTCDay()];
+    return med.days.includes(dayName);
+  }
+
+  return false;
+}
+
+function renderScheduleForDate(dateStr) {
+  const scheduleListEl = document.getElementById('schedule-list');
+  const scheduleEmptyStateEl = document.getElementById('schedule-empty-state');
+  const scheduleDateLabelEl = document.getElementById('schedule-date-label');
+
+  if (!scheduleListEl || !scheduleEmptyStateEl || !scheduleDateLabelEl) return;
+
+  const effectiveDateStr = dateStr || getTodayDateString();
+  const targetDate = parseDate(effectiveDateStr);
+  if (!targetDate) return;
+
+  const medicines = loadMedicines().filter((med) => shouldTakeOnDate(med, targetDate));
+
+  scheduleListEl.innerHTML = '';
+
+  const formattedDate = targetDate.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  });
+  scheduleDateLabelEl.textContent = formattedDate;
+
+  if (medicines.length === 0) {
+    scheduleEmptyStateEl.classList.remove('hidden');
+    return;
+  }
+
+  scheduleEmptyStateEl.classList.add('hidden');
+
+  medicines.forEach((med) => {
+    const li = document.createElement('li');
+    li.className = 'medicine-item';
+    li.dataset.id = med.id;
+
+    const main = document.createElement('div');
+    main.className = 'medicine-main';
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'medicine-name';
+    nameEl.textContent = med.name;
+
+    const doseEl = document.createElement('div');
+    doseEl.className = 'medicine-dose';
+    doseEl.textContent = med.dose || '';
+    if (!med.dose) doseEl.classList.add('hidden');
+
+    const meta = document.createElement('div');
+    meta.className = 'medicine-meta';
+
+    const tagRow = document.createElement('div');
+    tagRow.className = 'tag-row';
+
+    const freqTag = document.createElement('span');
+    freqTag.className = 'tag';
+    freqTag.textContent = formatFrequency(med);
+    tagRow.appendChild(freqTag);
+
+    const tod = formatTimeOfDay(med);
+    if (tod) {
+      const todTag = document.createElement('span');
+      todTag.className = 'tag secondary';
+      todTag.textContent = tod;
+      tagRow.appendChild(todTag);
+    }
+
+    const dateRange = formatDateRange(med);
+    if (dateRange) {
+      const dateTag = document.createElement('span');
+      dateTag.className = 'tag';
+      dateTag.textContent = dateRange;
+      tagRow.appendChild(dateTag);
+    }
+
+    meta.appendChild(tagRow);
+
+    main.appendChild(nameEl);
+    main.appendChild(doseEl);
+    main.appendChild(meta);
+
+    li.appendChild(main);
+
+    scheduleListEl.appendChild(li);
+  });
+}
+
+function renderScheduleForCurrentDate() {
+  const scheduleDateInput = document.getElementById('schedule-date');
+  if (!scheduleDateInput) return;
+  const value = scheduleDateInput.value || getTodayDateString();
+  renderScheduleForDate(value);
+}
+
 function renderMedicines() {
   const listEl = document.getElementById('medicine-list');
   const emptyStateEl = document.getElementById('empty-state');
@@ -54,6 +193,7 @@ function renderMedicines() {
 
   if (medicines.length === 0) {
     emptyStateEl.classList.remove('hidden');
+    renderScheduleForCurrentDate();
     return;
   }
 
@@ -122,6 +262,8 @@ function renderMedicines() {
 
     listEl.appendChild(li);
   });
+
+  renderScheduleForCurrentDate();
 }
 
 function deleteMedicine(id) {
@@ -149,12 +291,14 @@ function setupForm() {
     }
   });
 
-  clearAllBtn.addEventListener('click', () => {
-    if (loadMedicines().length === 0) return;
-    if (confirm('Clear all medicines?')) {
-      clearAllMedicines();
-    }
-  });
+  if (clearAllBtn) {
+    clearAllBtn.addEventListener('click', () => {
+      if (loadMedicines().length === 0) return;
+      if (confirm('Clear all medicines?')) {
+        clearAllMedicines();
+      }
+    });
+  }
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -193,8 +337,38 @@ function setupForm() {
   });
 }
 
+function setupAccordions() {
+  const accordions = document.querySelectorAll('.accordion');
+  accordions.forEach((accordion) => {
+    const header = accordion.querySelector('.accordion-header');
+    if (!header) return;
+
+    accordion.classList.remove('collapsed');
+
+    header.addEventListener('click', (event) => {
+      // Allow inner buttons like "Clear all" to work without toggling.
+      if (event.target.closest('#clear-all')) {
+        return;
+      }
+      accordion.classList.toggle('collapsed');
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   setupForm();
+  setupAccordions();
   renderMedicines();
+
+   const scheduleDateInput = document.getElementById('schedule-date');
+   if (scheduleDateInput) {
+     const today = getTodayDateString();
+     scheduleDateInput.value = today;
+     scheduleDateInput.addEventListener('change', () => {
+       const value = scheduleDateInput.value || getTodayDateString();
+       renderScheduleForDate(value);
+     });
+     renderScheduleForDate(scheduleDateInput.value);
+   }
 });
 

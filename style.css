@@ -64,7 +64,7 @@ main {
   font-size: 0.85rem;
   font-weight: 500;
   margin-bottom: 4px;
-  color: #0f172a;
+  color: #4b5563;
 }
 
 input[type='text'],
@@ -166,6 +166,77 @@ select:focus {
 .list-header h2 {
   margin: 0;
   font-size: 1.05rem;
+}
+
+.schedule-date-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.accordion {
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.accordion-header {
+  width: 100%;
+  padding: 8px 4px 8px 0;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.accordion-header h2 {
+  font-size: 1.05rem;
+  color: #ffffff;
+}
+
+.accordion-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 1px solid #cbd5f5;
+  position: relative;
+}
+
+.accordion-icon::before,
+.accordion-icon::after {
+  content: '';
+  position: absolute;
+  background: #64748b;
+  transition: transform 0.15s ease;
+}
+
+.accordion-icon::before {
+  top: 50%;
+  left: 4px;
+  right: 4px;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.accordion-icon::after {
+  left: 50%;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.accordion.collapsed .accordion-icon::after {
+  transform: translateX(-50%) scaleY(0);
+}
+
+.accordion-body {
+  padding-top: 4px;
+}
+
+.accordion.collapsed .accordion-body {
+  display: none;
 }
 
 .link-btn {
